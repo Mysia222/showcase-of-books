@@ -1,0 +1,53 @@
+.card-image img {
+    width: 200px;
+    margin: 0 auto;
+}
+
+.card {
+    width: 300px;
+    margin: 20px 30px;
+    padding: 10px 20px 5px 20px;
+}
+
+.card-content {
+    padding: 0px;
+    padding-bottom: 10px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 30px;
+    color: #898686;
+}
+
+.home-wr {
+    margin-top: 10px;
+    margin-left: 300px;
+}
+
+.price-card {
+    position: absolute;
+    margin-top: -40px;
+    margin-left: 150px;
+    font-size: 17px;
+}
+
+.col.s12.m6 {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.error-input {
+    color: red;
+    margin-top: -40px;
+}
+
+.edit-books-form {
+    width: 30%;
+    margin-left: 40px;
+}
+.input-field.col.s4 {
+    width: 406px;
+}

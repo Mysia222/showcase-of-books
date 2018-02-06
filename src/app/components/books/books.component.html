@@ -1,0 +1,11 @@
+
+<div class="card" [routerLink]="['/books/', book._id]">
+    <div class="card-image">
+        <img src="./assets/img/{{book.image}}">
+    </div>
+    <div class="card-content">
+        <span class="card-title">{{book.title}}</span>
+        <span class="card-title price-card">{{book.price | currency:"USD":true }}</span>
+        <p>{{book.authors}}</p>
+    </div>
+</div>
