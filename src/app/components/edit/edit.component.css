@@ -51,3 +51,16 @@ h2 {
 .input-field.col.s4 {
     width: 406px;
 }
+
+
+input#icon_prefix {
+    width: 300px;
+    float: right;
+    margin-right: 75% !important;
+}
+
+.search-ico {
+    margin-top: 10px;
+    margin-left: 10px;
+    position: absolute;
+}

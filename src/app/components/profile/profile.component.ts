@@ -2,15 +2,15 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute, Router } from '@angular/router';
 import { trigger,state,style,transition,animate,keyframes } from '@angular/animations';
-import { BooksService } from '../../services/books.service';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UsersService} from '../../services/users.service';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',  
   styleUrls: ['./profile.component.css'],
-  providers: [BooksService]
+  providers: []
 })
 
 export class ProfileComponent  {
@@ -29,19 +29,21 @@ export class ProfileComponent  {
     description: new FormControl('', Validators.required),
 });
 
+EditProfileForm = new FormGroup({
+  email: new FormControl('', Validators.required),
+  firstName: new FormControl('', Validators.required),
+  lastName: new FormControl('', Validators.required)
+});
+
   constructor(
-    private booksService: BooksService, 
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private router:Router) {
+    private router:Router,
+    private usersService: UsersService) {
   }
  
 
   ngOnInit() {
-    this.profile = JSON.parse(localStorage.getItem('user'));
-    this.currentUrl = this.activatedRoute.snapshot.params;
-    console.log(this.profile);
-
+    this.profile = this.authService.isLoggedIn();
   }
-
 }

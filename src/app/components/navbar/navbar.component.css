@@ -49,10 +49,25 @@ input#icon_prefix {
     width: 550px;
 }
 
-li.no-padding {
-    margin-top: 170px;
-}
 
 a.bold.collapsible-header.waves-effect.waves-teal {
     font-weight: bold;
+}
+
+.search-results {
+    width: 50%;
+}
+
+
+a .list-search {
+    color: #198476;
+    font-weight: 500;
+}
+
+.collapsible-body {
+    margin-left: 20px;
+}
+
+.side-nav li.active {
+    background-color: white;
 }

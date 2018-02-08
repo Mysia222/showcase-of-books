@@ -11,48 +11,35 @@ import { Router } from '@angular/router'
 })
 export class LoginComponent implements OnInit {
   public message: string;
+  profile;
 
-  constructor(private router:Router, private authService:AuthService, private usersService: UsersService) {}
+  constructor(private router:Router, private authService: AuthService, private usersService: UsersService) {}
 
   ngOnInit() {
-    this.message = 'Hello'; 
+
   }
   
   loginUser(e) {
 
     e.preventDefault();
-    var email = e.target.elements[0].value;
-    var password = e.target.elements[1].value;
-    var user = {
-      email: email,
-      password: password
+
+    let user = {
+        email: e.target.elements[0].value,
+        password: e.target.elements[1].value
     };
-    if(email == 'admin@gmail.com' && password == 'admin') {
-      this.authService.setloggedIn();
-      this.router.navigate(['books/edit']);
-    }
 
-    localStorage.setItem('user', JSON.stringify(user));
+    this.authService.logIn(user).subscribe(data => {
 
- /*  this.authService.logIn(email, password).subscribe(data => {  
-    console.log(data);
-  });;*/
-     
-/*
-    return this.getAllUsers()
-    .map(user => {
+        this.authService.setloggedIn();
+        this.authService.isLoggedIn();
 
-      let filteredUsers = users.filter(user => {
-        return user.username === request.body.username && user.password === request.body.password;
-    });
-        // login successful if there's a jwt token in the response
-        if (user && user.token) {
-            // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('currentUser', JSON.stringify(user));
+        if (this.authService.getloggedAdminIn()) {
+            this.router.navigate(['books/edit']);
+        } else {
+            this.router.navigate(['profile']);
+
         }
 
-        return user;
     });
-*/
  }
 }

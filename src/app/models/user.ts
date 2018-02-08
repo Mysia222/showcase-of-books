@@ -1,9 +1,11 @@
 export class User {
-    id: number;
+    _id: number;
     username: string;
     password: string;
     email: string;
     firstName: string;
     lastName: string;
     isAdmin: boolean;
+    exp: number;
+    iat: number;
 }

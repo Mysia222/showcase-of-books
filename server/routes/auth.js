@@ -1,78 +1,52 @@
 const User = require('../models/user');
-const jwt = require('jsonwebtoken');
 const config = require('../config/config');
+const passport = require('passport');
 
 module.exports = (router) => {
 
+    router.post('/register', function(req, res) {
 
-    router.post('/', function (req, res) {
-        console.log(req.body);
         let user = new User({
             firstName: req.body.firstName.toLowerCase(),
             lastName: req.body.lastName.toLowerCase(),
-            email: req.body.email.toLowerCase(),
-            password: req.body.password
+            email: req.body.email.toLowerCase()
         });
-           
-            user.save((err) => {
+        user.setPassword(req.body.password);
 
-                if(err) {
-                    console.log(err);
-                }
-                res.json({ success: true, message: 'User added!' });
-    
+        user.save((err) => {
+            var token;
+            token = user.generateJwt();
+            if (err) {
+                config.sendJSONresponse(res, err.response.status, err);
+            }
+            // If user is saved
+            config.sendJSONresponse(res, 500, {
+                success: true,
+                token: token
             });
+        });
     });
-
-
-
 
     router.post('/login', (req, res) => {
 
-        if (!req.body.email || !req.body.password) {
-            res.json({ success: false, message: 'No email/password was provided' });
-        } else {
-            User.findOne({ username: req.body.email.toLowerCase() }, (err, user) => {
-                if (err) {
-                    res.json({ success: false, message: err });
-                } else {
-                    if (!user) {
-                        res.json({ success: false, message: 'Username not found.' });
-                    } else {
-                        const validPassword = user.comparePassword(req.body.password);
-
-                        if (!validPassword) {
-                            res.json({ success: false, message: 'Password invalid' });
-                        } else {
-                           const token = jwt.sign({ userId: user._id }, config.secret, { expiresIn: '24h' });
-                            res.json({
-                                success: true,
-                                message: 'Success!',
-                                user: {
-                                    username: user.username
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-        }
-    });
-
-    router.get('/profile', (req, res) => {
-        User.findOne({ _id: req.decoded.userId }).select('lastName firstName email').exec((err, user) => {
-            // Check if error connecting
+        passport.authenticate('local', function(err, user, info) {
+            var token;
+            // If Passport throws/catches an error
             if (err) {
-                res.json({ success: false, message: err }); // Return error
-            } else {
-                // Check if user was found in database
-                if (!user) {
-                    res.json({ success: false, message: 'User not found' }); // Return error, user was not found in db
-                } else {
-                    res.json({ success: true, user: user }); // Return success, send user object to frontend for profile
-                }
+                config.sendJSONresponse(res, 404, err)
+                return;
             }
-        });
+            // If a user is found
+            if (user) {
+                config.sendJSONresponse(res, 200, {
+                    message: "You are welcome!",
+                    token: user.generateJwt()
+                })
+            } else {
+                // If user is not found
+                config.sendJSONresponse(res, 401, info)
+            }
+        })(req, res);
     });
 
     return router;

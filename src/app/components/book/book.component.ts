@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { trigger,state,style,transition,animate,keyframes } from '@angular/animations';
 import { BooksService } from '../../services/books.service';
 import { AuthService } from '../../services/auth.service';
+
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -27,6 +28,7 @@ export class BookComponent  {
     image: new FormControl('', Validators.required),
     price: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
+    category: new FormControl('', Validators.required)
 });
 
   constructor(
@@ -39,42 +41,43 @@ export class BookComponent  {
 
   getBookById(bookId) 
   {
-   console.log(this.booksService.getBookById(bookId))
-   this.bookObs = this.booksService.getBookById(bookId);
+    this.bookObs = this.booksService.getBookById(bookId);
   }
-onUpdateBookSubmit() {
+
+  onUpdateBookSubmit() {
+
     this.book = this.EditBookForm.value;
-    this.booksService.getBookById(this.currentUrl.id).subscribe (
-      book => { 
-        for (var key in this.book) {
-          if(!this.book[key]) {
-            this.book[key] = book[key];
-          } 
+    this.booksService.getBookById(this.currentUrl.id).subscribe(
+        book => {
+            for (var key in this.book) {
+                if (!this.book[key]) {
+                    this.book[key] = book[key];
+                }
+            }
+            this.booksService.updateBook(this.book, this.currentUrl.id)
+                .subscribe(successCode => {
+                        this.statusCode = successCode;
+                        this.bookObs = this.booksService.getBookById(this.currentUrl.id);
+                },
+                errorCode => this.statusCode = errorCode);
+
         }
-        this.booksService.updateBook(this.book, this.currentUrl.id)
-	        .subscribe(successCode => {
-		     this.statusCode = successCode;
-		     this.bookObs = this.booksService.getBookById(this.currentUrl.id);
-		},
-    errorCode => this.statusCode = errorCode);
-        
-      }
     );
 }
 
 deleteBook() {
-  this.isDelete = true
-  this.booksService.deleteBookById(this.currentUrl.id)
-    .subscribe( successCode => {
-     this.statusCode = 204;	
-  }, errorCode => this.statusCode = errorCode); 
+
+    this.isDelete = true
+    this.booksService.deleteBookById(this.currentUrl.id)
+        .subscribe(successCode => {
+            this.statusCode = 204;
+        }, errorCode => this.statusCode = errorCode);
 
 }
 
   ngOnInit() {
 
     this.currentUrl = this.activatedRoute.snapshot.params;
-    console.log(this.currentUrl.id)
     this.getBookById(this.currentUrl.id);
 
   }

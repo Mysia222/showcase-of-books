@@ -21,42 +21,37 @@ export class BooksService {
 
     }
 
-    createBook(book: Book):Observable<number> {
+    public createBook(book: Book):Observable<number> {
 
         return this.http.post(this.bookUrl, book)
-            .map(success => success.status)
+            .map(response => response.json())
     } 
 
-    getAllBooks(): Observable<Book[]>  {
+    public getAllBooks(): Observable<Book[]>  {
 
         return this.http.get(this.bookUrl)
-        .map(response => response.json())
+            .map(response => response.json())
     }
 
-    setHeader() {
-
-        let objectHeader = {
-            headers: new Headers({ 'Content-Type': 'application/json' }),
-            options: function() { return new RequestOptions({ headers: this.headers })}
-        }
-        return objectHeader;
-    }
-
-    getBookById(bookId: string): Observable<Book> {
+    public getBookById(bookId: string): Observable<Book> {
 
         return this.http.get(this.bookUrl +"/"+ bookId)
-        .map(response => response.json())
+            .map(response => response.json())
 
      } 
 
-     updateBook(book, bookId) {
-        return this.http.put(this.bookUrl +"/" + bookId, book)
-               .map(success => success.status)
-    } 
+     public updateBook(book, bookId) {
 
-    deleteBookById(bookId: string) {
+        return this.http.put(this.bookUrl +"/" + bookId, book)
+            .map(success => success.status)
+
+    }
+
+    public deleteBookById(bookId: string) {
+
         return this.http.delete(this.bookUrl +"/"+ bookId)
-               .map(success => success.status)
+            .map(success => success.status)
+            
     }
 
 }

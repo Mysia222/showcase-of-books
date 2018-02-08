@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-
+import { HttpHeaders } from '@angular/common/http'
 import { Http, Response, Headers, URLSearchParams, RequestOptions } from '@angular/http';
+import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Rx'
 import 'rxjs/add/operator/map';
@@ -10,63 +11,45 @@ import { url } from 'inspector';
 
 import { User } from '../models/user';
 
-const BOOKS_API: string = "./assets/data.json";
-
 @Injectable()
 export class UsersService {
 
-    userUrl = "http://localhost:3000/users";
-    registerUrl = "http://localhost:3000/auth";
-
-    constructor (private http: Http) {
+    url = "http://localhost:8000";
+    registerUrl = "http://localhost:8000/auth";
+    loginURL = "http://localhost:8000/auth";
+    private token = localStorage.getItem('mean-token');
+    private userEmail: string;
+    constructor (private http: Http, private router: Router) {
 
     }
 
+    createUser(user: User):Observable<any> {
 
-    createUser(user: User):Observable<number> {
-        console.log(user);
-        console.log(this.http.post(this.registerUrl, user));
-        return this.http.post(this.registerUrl, user)
-            .map(success => success.status)
+        return this.http.post(this.registerUrl + "/register", user)
+            .map(response => response.json())
+            
     } 
 
 
     getAllUsers(): Observable<User[]>  {
 
         return this.http.get(this.registerUrl)
-        .map(response => response.json())
+            .map(response => response.json())
 
     }
 
-    setHeader() {
+    updateUser(book) {
 
-        let objectHeader = {
-            headers: new Headers({ 'Content-Type': 'application/json' }),
-            options: function() { return new RequestOptions({ headers: this.headers })}
-        }
-        return objectHeader;
-    }
+        return this.http.put(this.url +"/"+ book.id, book)
+            .map(response => response.json())
 
-    getUserById(userId: string): Observable<User> {
-
-        /*let cpParams = new URLSearchParams();
-        cpParams.set('id', bookId);			
-        let options = new RequestOptions({ headers: this.setHeader().headers, params: cpParams });
-        return this.http.get(this.bookUrl, options)*/
-
-        return this.http.get(this.userUrl +"/"+ userId)
-        .map(response => response.json())
-
-     } 
-
-     updateUser(book) {
-        return this.http.put(this.userUrl +"/"+ book.id, book, this.setHeader().options)
-               .map(success => success.status)
     } 
 
     deleteUserById(bookId: string) {
-        return this.http.delete(this.userUrl +"/"+ bookId)
-               .map(success => success.status)
+
+        return this.http.delete(this.url +"/"+ bookId)
+            .map(response => response.json())
+
     }
 
 }

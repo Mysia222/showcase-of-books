@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
   }
 
   createForm() {
-
+    
     function passwordMatchValidator(g: FormGroup) {
       return g.get('password').value === g.get('passwordConfirm').value
          ? null : {'mismatch': true};
@@ -72,15 +72,14 @@ export class RegisterComponent implements OnInit {
 
   }
   registerUser() {
-/*
+
     let user = this.userForm.value;
+    delete user.passwordConfirm;
     this.usersService.createUser(user)
         .subscribe(
             data => {
-              console.log(data);
-              this.router.navigate(['/login']);
+                this.router.navigate(['/login']);
             });
-*/
 
-  }
+}
 }

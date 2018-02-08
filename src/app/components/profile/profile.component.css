@@ -32,9 +32,6 @@ h2 {
     margin-top: 10px;
 }
 
-span.card-title {
-    font-size: 18px !important;
-}
 
 p {
     font-weight: bold;
@@ -73,11 +70,6 @@ card .card-title {
     width: 50%;
 }
 
-.card-title.decription {
-    float: left;
-    margin-top: -380px;
-    margin-left: 400px;
-}
 
 #textarea1 {
 
@@ -119,4 +111,14 @@ input.waves-effect.waves-light.btn {
 
 .row.user {
     margin-left: 270px;
+}
+
+.card-content {
+    margin-left: -230px;
+    width: 50%;
+    margin-top: 30px;
+}
+
+span.label {
+    font-weight: bold;
 }

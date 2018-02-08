@@ -23,7 +23,7 @@ import { UsersService } from './services/users.service';
 import { HttpModule } from '@angular/http';
 import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/sort.pipe';
-import { AuthGuard } from './guards/auth.guard'
+import { AuthGuard } from './guards/auth.guard'; //add admin Guard
 
 @NgModule({
   declarations: [

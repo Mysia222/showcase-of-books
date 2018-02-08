@@ -1,97 +1,97 @@
-
 const Book = require('../models/book');
-
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
-var fs = require('fs');
-
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
-
+const config = require('../config/config');
 
 module.exports = (router) => {
 
-    router.post('/', function (req, res) {
-        let imgPath = "./src/assets/img/" + req.body.image;
+    router.post('/', function(req, res) {
+        
+        const book = new Book({
+            title: req.body.title,
+            description: req.body.description,
+            image: req.body.image,
+            price: req.body.price,
+            category: req.body.category,
+            publicationDate: req.body.publicationDate,
+            authors: req.body.authors
+        });
 
-            const book = new Book({
-                title: req.body.title,
-                description: req.body.description,
-                image: req.body.image,
-                price: req.body.price,
-                publicationDate: req.body.publicationDate,
-                authors: req.body.authors
-
-
+        book.save((err) => {
+            if (err) {
+                config.sendJSONresponse(res, err.response.status, err);
+            }
+            config.sendJSONresponse(res, 200, {
+                success: true,
+                message: 'Book added!'
             });
-            /*book.img.data = fs.readFileSync(imgPath);
-            book.img.contentType = book.image.split('.')[1];
-*/
-console.log(book)
-            book.save((err) => {
-
-                if(err) {
-                    console.log(err);
-                }
-                res.json({ success: true, message: 'Book added!' });
-    
-            });
+        });
     });
 
-    router.get('/', function (req, res) {
+    router.get('/', function(req, res) {
 
         Book.find({}, (err, books) => {
-            console.log(books)
             if (err) {
-                res.json({ success: false, message: err });
+                config.sendJSONresponse(res, err.response.status, err);
             } else {
 
                 if (!books) {
-                    res.json({ success: false, message: 'No books found.' });
+                    config.sendJSONresponse(res, err.response.status, err);
                 } else {
-                    res.json(books);
+                    config.sendJSONresponse(res, 200, books);
                 }
             }
-        }).sort({ '_id': -1 });
-});
+        }).sort({
+            '_id': -1
+        });
+    });
 
 
-router.delete('/:id', function (req, res) {
+    router.delete('/:id', function(req, res) {
 
-    Book.deleteOne({ _id: req.params.id }, (err, book) => {
+        Book.deleteOne({
+            _id: req.params.id
+        }, (err, book) => {
 
             if (!book) {
-                res.json({ success: false, message: 'Book not found.' });
+                config.sendJSONresponse(res, err.response.status, err);
             } else {
-                res.json({ success: true, message: 'Book deleted' });
+                config.sendJSONresponse(res, 200, {
+                    success: true,
+                    message: 'Book deleted!'
+                });
             }
         });
-  
-}); 
+    });
 
-router.get('/:id', function (req, res) {
+    router.get('/:id', function(req, res) {
 
-    Book.findOne({ _id: req.params.id }, (err, book) => {
+        Book.findOne({
+            _id: req.params.id
+        }, (err, book) => {
 
             if (!book) {
-                res.json({ success: false, message: 'Book not found.' });
+                config.sendJSONresponse(res, 401, {
+                    success: false,
+                    message: 'Book not found.'
+                })
             } else {
-                res.json(book);
+                config.sendJSONresponse(res, 200, book);
             }
         });
-  
-}); 
 
-router.put('/:id', function (req, res) {
-console.log(req.body);
-        Book.update({_id: req.params.id}, req.body, function (err, book) {
-            if (err) return res.status(500).send("There was a problem updating the user.");
-            res.json(book);
+    });
+
+    router.put('/:id', function(req, res) {
+        Book.update({
+            _id: req.params.id
+        }, req.body, function(err, book) {
+            if (err)
+                return config.sendJSONresponse(res, 500, {
+                    success: false,
+                    message: "There was a problem updating the user."
+                });
+            config.sendJSONresponse(res, 200, book);
         });
-  
-}); 
+    });
 
     return router;
 };
-

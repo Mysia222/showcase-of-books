@@ -1,57 +1,101 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { User } from '../models/user';
 
 @Injectable()
 export class AuthService {
 
-    private isUserLoggedIn;
-    private username;
-    public loginURL;
+    private isUserLoggedIn: boolean;
+    private isAdminLoggedIn: boolean;
+    private token: string;
+    public authURL: string;
+    private userId: any;
+    private adminId = "5a7abb39f766371cc0a70191";
     
   constructor( private http: Http) { 
     this.isUserLoggedIn = false;
-    this.loginURL = "http://localhost:3000/auth/login";
+    this.isAdminLoggedIn = false;
+    this.authURL = "http://localhost:8000/auth";
   }
 
-  logout() {
+  private saveToken(token: string): void {
 
-  }
+    localStorage.setItem('mean-token', token);
+    this.token = token;
 
-  setloggedIn() {
-    this.isUserLoggedIn = true;
-  }
-  setloggedOut() {
-    this.isUserLoggedIn = false;
-  }
-  getloggedIn() {
-    return this.isUserLoggedIn;
-  }
+}
 
-  logIn(email, password) {
+private getToken(): string {
 
-    let logInData = {
-      email: email,
-      password: password
+    if (!this.token) {
+      this.token = localStorage.getItem('mean-token');
+    }
+    return this.token;
+
+}
+
+private getUserDetails(): User {
+
+    const token = this.getToken();
+    let user;
+    if (token) {
+      user = token.split('.')[1];
+      user = window.atob(user);
+      return JSON.parse(user);
+    } else {
+      return null;
     }
 
-    return this.http.post(this.loginURL, JSON.stringify(logInData));
-    
-  }
+}
 
-  login(user) {
-    return this.http.post(this.loginURL + '/authentication/login', user).map(res => res.json());
-  }
+public isLoggedIn() {
 
+    const user = this.getUserDetails();
+    this.userId = user._id;
+    return user;
 
-  storeUserData(email, password) {
-    let logInData = {
-      email: email,
-      password: password
-    };
+}
 
-    localStorage.setItem('user', JSON.stringify(logInData));
+public logIn(user) {
 
-  }
+    return this.http.post(this.authURL + '/login', user)
+    .map(data => {
+        if (data.json().token) {
+            this.saveToken(data.json().token);
+          }
+     return data;
+    });
+
+}
+
+public setloggedIn() {
+
+    this.isLoggedIn();
+    this.isUserLoggedIn = true;
+    this.isAdminLoggedIn = this.userId === this.adminId;
+
+}
+
+public setloggedOut() {
+
+    this.isAdminLoggedIn = false;
+    this.isUserLoggedIn = false;
+
+    localStorage.clear();
+
+}
+
+public getloggedIn() {
+  
+    return this.isUserLoggedIn;
+
+}
+
+public getloggedAdminIn() {
+
+    return this.isAdminLoggedIn
+
+}
 
 }

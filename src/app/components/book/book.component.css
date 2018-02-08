@@ -56,8 +56,6 @@ input#icon_prefix {
     position: absolute;
 }
 
-
-
 .card.once-book {
     width: 80%;
     margin-left: -200px;
@@ -119,4 +117,14 @@ input.waves-effect.waves-light.btn {
 
 .row.user {
     margin-left: 270px;
+}
+
+span.price-card.category {
+    margin-top: 16px;
+    margin-left: -100px;
+    display: block;
+}
+
+p.category-label {
+    position: absolute;
 }

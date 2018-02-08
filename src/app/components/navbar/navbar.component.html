@@ -1,45 +1,61 @@
-<ul id="dropdown1" class="dropdown-content">
-        <li><a href="#!">one</a></li>
-        <li><a href="#!">two</a></li>
+<ul id="dropdown1"  class="dropdown-content">
+        <li> <a class="nav-link" routerLink="/books/edit"> Edit Books</a>
+        </li>
+         <li><a  class="nav-link" routerLink="/books/edit"> Edit Users</a>
+        </li>
         <li class="divider"></li>
         <li><a href="#!">three</a></li>
-     </ul>
+</ul>
+
      <nav class="lighten-2">
         <div class="nav-wrapper lighten-2">
            <a routerLink="/" class="brand-logo"><img src=".\assets\img\agenda.png"> </a>
            <ul class="right hide-on-med-and-down">
-              <li>
-                 <i class="material-icons prefix">search</i>
+                
+              <!--<li >
+                 <a  *ngIf="usersService.getloggedAdminIn()" class="dropdown-button" data-activates="dropdown1">Admin<i class="material-icons right">arrow_drop_down</i></a>
+              </li>-->
+              <li> <a routerLink="/">Home</a></li>
+              <li> <a routerLink="/register" *ngIf="!authService.getloggedIn()">Register</a>
               </li>
-              <li>
-                 <input id="icon_prefix" type="text" class="validate">
-              </li>
-              <li>
-                 <a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a>
-              </li>
-              <li><a routerLink="/">Home</a></li>
-              <li><a routerLink="/register" *ngIf="!authService.getloggedIn()" >Register</a></li>
               <li> <a *ngIf="!authService.getloggedIn()" class="nav-link" routerLink="/login"> Log in</a>
               </li>
               <li> <a *ngIf="authService.getloggedIn()" class="nav-link" routerLink="/profile"> Profile</a>
               </li>
-              <li> <a *ngIf="authService.getloggedIn()" class="nav-link" (click) = "LogOut()"> Log out</a>
+              <li> <a *ngIf="authService.getloggedAdminIn()" class="nav-link" routerLink="/books/edit"> Edit Books</a>
+              </li>
+              <li> <a *ngIf="authService.getloggedAdminIn()" class="nav-link" routerLink="/books/edit"> Edit Users</a>
+              </li>
+              <li> <a *ngIf="authService.getloggedIn()" class="nav-link" (click)="LogOut()"> Log out</a>
               </li>
            </ul>
         </div>
      </nav>
+
      <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
         <li class="logo">
            <a href="#!" class="brand-logo"><img src=".\assets\img\agenda.png"> </a>
         </li>
         <h3> Showcase of books </h3>
+        <li class="search">
+            <div class="search-wrapper card">
+                <input id="search" [(ngModel)]="queryString" ><i class="material-icons">search</i>
+                <div *ngIf = "queryString">
+                  <div class="search-results" *ngIf="booksObs | async as onebook else loading" >
+                        <div *ngFor="let book of onebook | filter: queryString" class="list-search">
+                              <a [routerLink]="['/books/', book._id]">  {{book.title}} </a>
+                        </div>
+                  </div>
+                </div>
+            </div>
+       </li>
         <li class="no-padding">
            <ul class="collapsible collapsible-accordion">
               <li>
                  <a class="bold collapsible-header active waves-effect waves-teal">{{ booksTitle | uppercase}}</a>
                  <div class="collapsible-body" *ngFor="let category of categories">
                     <ul>
-                       <li> <a [routerLink]="['/books/category/', category.category_name]"> {{category.category_name }}</a></li>
+                       <li> <div [routerLink]="['/books/category/', category.category_name]"> {{category.category_name }}</div></li>
                     </ul>
                  </div>
               </li>

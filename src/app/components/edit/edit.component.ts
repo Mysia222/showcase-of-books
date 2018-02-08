@@ -25,11 +25,13 @@ export class EditComponent  {
     title: new FormControl('', Validators.required),
     authors: new FormControl('', Validators.required),	 
     image: new FormControl('', Validators.required),
-    price: new FormControl('', Validators.required)
+    price: new FormControl('', Validators.required),
+    category: new FormControl('', Validators.required),
 
 });
 
   constructor( private booksService: BooksService) {
+
     this.searchableList = ['title'];
    
   }
@@ -42,28 +44,27 @@ export class EditComponent  {
 
 onBookFormSubmit() {
 
-  this.processValidation = true;   
-	  if (this.BookForm.invalid) {
-	       return; 
-    }   
+  this.processValidation = true;
+  if (this.BookForm.invalid) {
+      return;
+  }
 
   let book = this.BookForm.value;
 
-    this.booksService.createBook(book)
-     .subscribe(successCode => {
-         this.getAllBooks();	
-     }
-    );
-   
+  this.booksService.createBook(book)
+      .subscribe(data => {
+          this.getAllBooks();
+      });
+
 }
 
 deleteBook(bookId) {
 
   this.booksService.deleteBookById(bookId)
-    .subscribe( successCode => {
-     this.statusCode = 204;
-     this.getAllBooks();	
-  }, errorCode => this.statusCode = errorCode); 
+     .subscribe(successCode => {
+         this.statusCode = 204;
+         this.getAllBooks();
+     }, errorCode => this.statusCode = errorCode);
 
 }
 
@@ -71,6 +72,7 @@ deleteBook(bookId) {
     
     this.getAllBooks();
     this.isAdmin = true;
+
   }
 
 }

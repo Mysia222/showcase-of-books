@@ -37,7 +37,6 @@ h2 {
 
 span.card-title {
     font-size: 18px !important;
-    /* font-weight: bold !important; */
 }
 
 p {
@@ -50,9 +49,7 @@ a.collapsible-header.waves-effect.waves-teal {
 
 input#icon_prefix {
     width: 300px;
-    /* z-index: 33333; */
     float: right;
-    /* margin-left: -00px; */
     margin-right: 1000px;
 }
 

@@ -1,79 +1,50 @@
 <div class="home-wr">
-                <div *ngIf="isDelete">
-                   <h2>This item deleted</h2>
-                   <a class="waves-effect waves-light" routerLink="/books/edit/">Go back</a>
+    <div *ngIf="isDelete">
+        <h2>This item deleted</h2>
+        <a class="waves-effect waves-light" routerLink="/books/edit/">Go back</a>
+    </div>
+    <div>
+        <div class="admin-card" *ngIf="authService.getloggedIn()">
+            <div class="row">
+                <form [formGroup]="EditProfileForm" (ngSubmit)="onUpdateBookSubmit()">
+                <div class="col s5">
+                <div class="card once-book">
+                    <div class="card-image">
+                        <img src="./assets/img/profile.png">
+                    </div>
                 </div>
-                <div>
-                   <div class="admin-card" *ngIf="authService.getloggedIn() else user">
-                      <div class="row">
-                         <form [formGroup]="EditBookForm" (ngSubmit)="onUpdateBookSubmit()">
-                         <div class="col s5">
-                            <div class="card once-book">
-                               <div class="card-image">
-                                  <img src="./assets/img/profile.png">
-                               </div>
-                               <div class="card-content">
-                                  <span class="card-title price-card"> 
-                                  Email: <input formControlName="title" id="input_text" type="text" value = {{profile.email}}> 
-                                  </span>
-                                  <span> 
-                                  FirstName: <input id="input_text" formControlName="image" type="text" value = {{book.image}}>
-                                  </span>
-                                  <span class="price-card"> 
-                                  LastName: <input formControlName="price" id="input_text" type="text" value = {{book.price}}> 
-                                  </span>
-                                  <span> 
-                                  Author: <input id="input_text" formControlName="author" type="text" value = {{book.authors}}>
-                                  </span>
-                               </div>
-                            </div>
-                         </div>
-                         <div class="col s7">
-                            <p>Description:</p>
-                            <textarea id="textarea1" formControlName="description" class="materialize-textarea" value={ {book.description}}></textarea>
-                         </div>
-                         <input class="waves-effect waves-light btn" type="submit" value="Save">
-                         <a class="waves-effect waves-light btn" (click)="deleteBook()">delete</a>
-                         </form>
-                      </div>
-                   </div>
-                   <ng-template #user>
-                      <div class="row user">
-                         <div class="col s5">
-                            <div class="card once-book">
-                               <div class="card-image">
-                                  <img src="./assets/img/{{book.image}}">
-                               </div>
-                               <div class="card-content">
-                                  <span class="card-title price-card">Title: {{book.title}} </span>
-                                  <span class="price-card">Price(USD): {{book.price}}</span>
-                                  <div>
-                                     <span class="price-card">Author: {{book.authors}}
-                                     </span>
-                                  </div>
-                               </div>
-                            </div>
-                         </div>
-                         <div class="col s7">
-                            <p>Description:</p>
-                            <div id="textarea1" class="materialize-textarea">{{book.description}}</div>
-                         </div>
-                      </div>
-                   </ng-template>
-                   <ng-template #loading>
-                      <div class="preloader-wrapper big active">
-                         <div class="spinner-layer spinner-green-only">
-                            <div class="circle-clipper left">
-                               <div class="circle"></div>
-                            </div>
-                            <div class="gap-patch">
-                               <div class="circle"></div>
-                            </div>
-                            <div class="circle-clipper right">
-                               <div class="circle"></div>
-                            </div>
-                         </div>
-                      </div>
-                   </ng-template>
+                </div>
+                <div class="col s7">
+                <div class="card-content">
+                    <span class=" price-card"> 
+                    <span class="label"> Email: </span> <input formControlName="email" id="input_text" type="text" value = {{profile.email}}> 
+                    </span>
+                    <span> 
+                    <span class="label"> FirstName:</span> <input id="input_text" formControlName="firstName" type="text" value = {{profile.firstName|uppercase}}>
+                    </span>
+                    <span class="price-card"> 
+                    <span class="label">LastName: </span> <input formControlName="lastName" id="input_text" type="text" value = {{profile.lastName|uppercase}}> 
+                     </span>
+                    </div>
+                </div>
+                <input class="waves-effect waves-light btn profile-account" type="submit" value="Save">
+                </form>
+            </div>
+        </div>
+        <ng-template #loading>
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-green-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
                 </div>
              </div>
+            </div>
+        </ng-template>
+    </div>
+</div>

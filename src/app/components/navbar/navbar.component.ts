@@ -2,18 +2,23 @@
 import { Meta, Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'
+
 import { AuthService} from '../../services/auth.service';
+import { UsersService} from '../../services/users.service';
+import { BooksService} from '../../services/books.service';
 
 @Component({
   selector: 'nav-bar',
   templateUrl: './navbar.component.html',  
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
+  providers: [BooksService]
 })
 
 export class NavbarComponent {
 
-    constructor(private authService: AuthService, private router: Router) {}
-
+    constructor(private authService: AuthService, private router: Router, private booksService: BooksService, private usersService: UsersService) {}
+  booksObs;
+  event = false;
   booksTitle = 'Books';
 
   categories =[
@@ -49,8 +54,13 @@ export class NavbarComponent {
     localStorage.clear();
     this.router.navigate(['home']);
   }
+  isKey() {
+      return !this.event;
+  }
 
   ngOnInit() {
+
+    this.booksObs = this.booksService.getAllBooks();
   
   }
 

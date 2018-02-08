@@ -10,31 +10,31 @@
         <li>
             <label>Sort: </label>
             <select class="browser-default"  [(ngModel)]="sortString" >
-                            <option value="" disabled> Choose your option</option>
-                            <option value="No sort" selected>No sort</option>
-                            <option value="SortPrice: Lowest to Highest">SortPrice: Lowest to Highest</option>
-                            <option value="SortPrice: Highest to Lowest">SortPrice: Highest to Lowest</option>
-                            <option value="3">Relevance</option>
+                <option value="" disabled> Choose your option</option>
+                <option value="No sort" selected>No sort</option>
+                <option value="SortPrice: Lowest to Highest">SortPrice: Lowest to Highest</option>
+                <option value="SortPrice: Highest to Lowest">SortPrice: Highest to Lowest</option>
+                <option value="3">Relevance</option>
             </select>
         </li>
     </ul>
     <div class="row" *ngIf="booksObs | async as onebook else loading">
         <div class="col s12 m6">
-            <app-books [@myAwesomeAnimation]='state' (click)="animateMe()" *ngFor="let book of onebook | sort: sortString | filter: queryString" [book]="book" [category] = "category">   
+            <app-books *ngFor="let book of onebook | sort: sortString | filter: queryString" [book]="book" [category] = "category">   
             </app-books>
         </div>
     </div>
     <ng-template #loading>
-            <div class="preloader-wrapper big active">
-                    <div class="spinner-layer spinner-green-only">
-                      <div class="circle-clipper left">
-                        <div class="circle"></div>
-                      </div><div class="gap-patch">
-                        <div class="circle"></div>
-                      </div><div class="circle-clipper right">
-                        <div class="circle"></div>
-                      </div>
-                    </div>
-                  </div>
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-green-only">
+                <div class="circle-clipper left">
+                <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                <div class="circle"></div>
+                </div>
+            </div>
+        </div>
     </ng-template>
 </div>

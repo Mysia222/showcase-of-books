@@ -4,14 +4,22 @@ const express = require('express'),
       config = require('./config/config'),
       path = require('path'),
       router = express.Router(),
-      cors = require('cors');
+      cors = require('cors'),
+      jwt = require('express-jwt');
 
 //mongoDB
 const mongoose = require('mongoose');
-            
+
+const authJwt = jwt({
+    secret: config.secret,
+    userProperty: 'user'
+});
+
+require('./config/passport');
 //routers
 const books = require('./routes/books')(router);
 const auth = require('./routes/auth')(router);
+const profiles = require('./routes/profiles')(router);
 
 //connection to DB
 mongoose.connect(config.dbUrl,  { useMongoClient: true });
@@ -26,9 +34,9 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // Use routes in application
 app.use('/books', books);
-
-// Use routes in application
 app.use('/auth', auth);
+app.use('/profile', authJwt, profiles);
+
 
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {

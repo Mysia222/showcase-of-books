@@ -1,15 +1,15 @@
 <div class="home-wr">
-        <h2> Books</h2>
+        <h2> Edit Books</h2>
         <ul>
-           <li>
-              <i class="material-icons prefix search-ico">search</i>
-           </li>
-           <li>
-              <input id="icon_prefix" type="text" [(ngModel)]="queryString" class="validate">
-           </li>
+                <li>
+                        <i class="material-icons prefix search-ico">search</i>
+                    </li>
+                    <li>
+                        <input id="icon_prefix" type="text" [(ngModel)]="queryString" class="validate">
+                    </li>
         </ul>
+
         <form [formGroup]="BookForm" (ngSubmit)="onBookFormSubmit()" class="col s4 edit-books-form">
-        <!--(ngSubmit)="onBookFormSubmit()" -->
         <div class="row">
            <div class="input-field col s12">
               <p *ngIf="BookForm.get('title').invalid && processValidation" class="error-input" [ngClass]="'error'"> Title is required. </p>
@@ -33,26 +33,20 @@
               <label for="image"> ImageUrl</label>
            </div>
            <div class="input-field col s12">
-              <div class="file-field input-field">
-                 <div class="btn">
-                    <span>File</span>
-                    <input type="file">
-                 </div>
-                 <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
-                 </div>
-              </div>
-           </div>
+                <input type="text" class="validate" formControlName="category">
+                <label for="category"> Category </label>
+            </div>
         </div>
         <div class="row">
            <input class="waves-effect waves-light btn" type="submit" value="Add new book">
         </div>
         </form>
+
         <div class="row" *ngIf="booksObs | async as onebook else loading">
            <div class="col s12 m6">
-              <app-books  *ngFor="let book of onebook " [book]="book" [category] = "category" >
+              <app-books  *ngFor="let book of onebook | filter: queryString" [book]="book" [category] = "category" >
               </app-books>
-              <!-- <button class="waves-effect waves-light btn" (onclick)="deleteBook(book.id)"> Delete </button>-->
            </div>
         </div>
-     </div>
+
+</div>
